@@ -1,0 +1,22 @@
+---
+  - name: Create a new database with name 'scada'
+    mysql_db:
+      name: scada
+      state: present
+
+  # Copy database dump file to remote host and restore it to database 'scada_db'
+  - name: Copy database dump file
+    copy:
+      src: ../../../data/dumps/scada_dump.sql
+      dest: /tmp
+  - name: Restore database
+    mysql_db:
+      name: scada
+      state: import
+      target: /tmp/scada_dump.sql
+
+  # - name: Dump scada to scada_dump.sql
+  #   mysql_db:
+  #     state: dump
+  #     name: all
+  #     target: /tmp/scada_dump.sql

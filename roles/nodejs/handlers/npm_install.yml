@@ -1,0 +1,4 @@
+---
+  - name: Install packages based on package.json.
+    npm:
+      path: /opt/egston/scada/gui

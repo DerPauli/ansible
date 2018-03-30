@@ -1,0 +1,7 @@
+---
+  - name: Install npm
+    apt: name=npm update_cache=yes cache_valid_time=3600 state=present
+    sudo: yes
+
+  - name: make sure the latest npm is installed
+    command: npm install -g npm

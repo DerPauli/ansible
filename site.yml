@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: true
+  gather_facts: false
+  pre_tasks:
+  - name: Install python2 for Ansible
+    raw: bash -c "test -e /usr/bin/python || (apt -qqy update && apt install -qqy python-minimal)"
+    register: output
+    changed_when: output.stdout != ""
+
+  # apply conditional to all imported tasks
+  tasks:
+    - import_tasks: roles/common/user_mgmt/create_user.yml
+#    - import_tasks: roles/common/user_mgmt/set_paths.yml
+    - import_tasks: roles/database/tasks/create_db.yml
+    - import_tasks: roles/database/tasks/setup_db.yml
+    - import_tasks: roles/rabbitmq/tasks/create_rabbitmq.yml
+    - import_tasks: roles/rabbitmq/handlers/start_rabbitmq.yml
+    - import_tasks: roles/common/chromium/install_chromium.yml
+    - import_tasks: roles/nodejs/tasks/install_node.yml
+#   TODO: import this line after copying all files
+#    - import_tasks: roles/nodejs/handlers/npm_install.yml

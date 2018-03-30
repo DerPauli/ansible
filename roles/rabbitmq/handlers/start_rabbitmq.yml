@@ -1,0 +1,8 @@
+---
+  - copy:
+      src: ../../../data/rabbitmq/rabbitmq.conf
+      dest: /etc/rabbitmq/
+
+  - service:
+      name: rabbitmq-server
+      state: restarted

@@ -1,0 +1,3 @@
+---
+#   TODO: find correct definition of setting env_path
+  - name: Setting variables for LD_LIBRARY_PATH

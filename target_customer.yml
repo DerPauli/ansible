@@ -1,0 +1,28 @@
+---
+- hosts: customer
+  remote_user: user
+  gather_facts: false
+
+  # promt the user to story sudo pass
+  # https://github.com/ansible/ansible/issues/7742#issuecomment-116336350
+  vars_prompt:
+  - name: "ansible_sudo_pass"
+    prompt: "SUDO password"
+    private: yes
+
+  # install python2 on target machine for ansible to work properly
+  # https://gist.github.com/gwillem/4ba393dceb55e5ae276a87300f6b8e6f
+  pre_tasks:
+  - name: Install python2 for Ansible
+    raw: bash -c "test -e /usr/bin/python || (apt -qqy update && apt install -qqy python-minimal)"
+    register: output
+    changed_when: output.stdout != ""
+    become: true
+    become_method: sudo
+
+  # import all necessary tasks for target_[hostname].yml playbook
+  tasks:
+    - import_tasks: roles/common/print_machine.yml
+    - import_tasks: roles/database/tasks/create_db.yml
+    - import_tasks: roles/database/tasks/setup_db.yml
+    - import_tasks: roles/common/chromium/install_chromium.yml
